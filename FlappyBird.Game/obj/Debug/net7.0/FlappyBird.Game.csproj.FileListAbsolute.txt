@@ -1,0 +1,15 @@
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\bin\Debug\net7.0\FlappyBird.Game.deps.json
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\bin\Debug\net7.0\FlappyBird.Game.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\bin\Debug\net7.0\FlappyBird.Game.pdb
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\bin\Debug\net7.0\FlappyBird.Resources.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\bin\Debug\net7.0\FlappyBird.Resources.pdb
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.csproj.AssemblyReference.cache
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.GeneratedMSBuildEditorConfig.editorconfig
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.AssemblyInfoInputs.cache
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.AssemblyInfo.cs
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.csproj.CoreCompileInputs.cache
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.csproj.CopyComplete
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\refint\FlappyBird.Game.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\FlappyBird.Game.pdb
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Game\obj\Debug\net7.0\ref\FlappyBird.Game.dll

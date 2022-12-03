@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ppy.osu.Framework" Version="2022.1203.0"/>
+    <PackageReference Include="OpenTK" Version="4.7.5"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlappyBird.Resources\FlappyBird.Resources.csproj"/>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>enable</Nullable>
+    <UseWPF>True</UseWPF>
+    <StartupObject/>
+    <UseWindowsForms>False</UseWindowsForms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ppy.osu.Framework" Version="2022.1203.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlappyBird.Game\FlappyBird.Game.csproj"/>
+  </ItemGroup>
+</Project>

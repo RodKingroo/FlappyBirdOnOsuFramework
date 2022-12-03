@@ -1,0 +1,12 @@
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\bin\Debug\net7.0\FlappyBird.Resources.deps.json
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\bin\Debug\net7.0\FlappyBird.Resources.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\bin\Debug\net7.0\FlappyBird.Resources.pdb
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.csproj.AssemblyReference.cache
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.GeneratedMSBuildEditorConfig.editorconfig
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.AssemblyInfoInputs.cache
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.AssemblyInfo.cs
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.csproj.CoreCompileInputs.cache
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\refint\FlappyBird.Resources.dll
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\FlappyBird.Resources.pdb
+D:\Codes\FlappyBirdOnOsuFramework\FlappyBird.Resources\obj\Debug\net7.0\ref\FlappyBird.Resources.dll
