@@ -6,10 +6,15 @@ namespace FlappyBird.Windows
 {
     public class Source
     {
-        public static void Main()
+        private const string _baseGameName = @"Flappy Bird";
+
+        [System.STAThread]
+        public static void Main(string[] args)
         {
-            using(GameHost host = Host.GetSuitableDesktopHost(@"Flappy Bird"))
-            using(osu.Framework.Game game = new FlappyBirdGame())
+            string gameName = _baseGameName;
+
+            GameHost host = Host.GetSuitableDesktopHost(gameName);
+            osu.Framework.Game game = new FlappyBirdGame();
             host.Run(game);
         }
     }

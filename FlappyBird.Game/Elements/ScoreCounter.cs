@@ -1,14 +1,14 @@
 namespace FlappyBird.Game.Elements
 {
-    public class ScoreCounter
+    public partial class ScoreCounter
     {
-        public int Score { get; set; }
+        public int score { get; set; }
 
         public ScoreSpriteText ScoreSpriteText = new();
 
         public void Reset()
         {
-            Score = 0;
+            score = 0;
             ScoreSpriteText.Text = "0";
             ScoreSpriteText.Hide();
 
@@ -18,8 +18,8 @@ namespace FlappyBird.Game.Elements
 
         public void IncrementScore()
         {
-            Score++;
-            ScoreSpriteText.Text = Score.ToString();
+            score++;
+            ScoreSpriteText.Text = score.ToString();
         }
 
     }

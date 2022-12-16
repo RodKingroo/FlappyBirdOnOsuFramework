@@ -3,7 +3,7 @@ using osu.Framework.Graphics.Shapes;
 
 namespace FlappyBird.Game.Elements
 {
-    public class ScreenFlash : Box
+    public partial class ScreenFlash : Box
     {
         public ScreenFlash()
         {
@@ -13,10 +13,8 @@ namespace FlappyBird.Game.Elements
 
         }
 
-        public void Flash(double fadeInDuration, double fadeOutDuration)
-        {
-            this.FadeIn(fadeInDuration).Then().FadeOut(fadeOutDuration);
+        public void Flash(double fadeInDuration, double fadeOutDuration) 
+            => this.FadeIn(fadeInDuration).Then().FadeOut(fadeOutDuration);
             
-        }
     }
 }

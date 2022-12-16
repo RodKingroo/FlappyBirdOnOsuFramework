@@ -1,4 +1,3 @@
-using System;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Sample;
 using osu.Framework.Graphics;
@@ -13,20 +12,11 @@ namespace FlappyBird.Game.Elements
 {
     public partial class Bird : CompositeDrawable
     {
-        public float GroundY = 0.0f;
+        public double groundY = 0.0f;
 
-        public bool IsTouchingGround { get; set; }
+        public bool isTouchingGround { get; set; }
 
-        public Quad CollisionQuad
-        {
-            get
-            {
-                RectangleF rect = ScreenSpaceDrawQuad.AABBFloat;
-                rect = rect.Shrink(new Vector2(rect.Width * 0.3f, rect.Height * 0.2f));
-                return Quad.FromRectangle(rect);
-            }
-        }
-
+        
         private TextureAnimation animation;
 
         [Resolved]
@@ -38,14 +28,24 @@ namespace FlappyBird.Game.Elements
 
         private float currentVelocity;
 
+        public Quad CollisionQuad
+        {
+            get
+            {
+                RectangleF rect = ScreenSpaceDrawQuad.AABBFloat;
+                rect = rect.Shrink(new Vector2(rect.Width * 0.3f, rect.Height * 0.2f));
+                return Quad.FromRectangle(rect);
+            }
+        }
+
         [BackgroundDependencyLoader]
-        private void load(ISampleStore samples)
+        private void Load(ISampleStore samples)
         {
             Anchor = Anchor.CentreLeft;
             Origin = Anchor.Centre;
-            Position = new Vector2(120.0f, .0f);
+            Position = new Vector2(120.0f, 0.0f);
 
-            animation = new TextureAnimation
+            animation = new ()
             {
                 Origin = Anchor.Centre,
                 Anchor = Anchor.Centre,
@@ -56,10 +56,10 @@ namespace FlappyBird.Game.Elements
             animation.AddFrame(textures.Get("redbird-midflap"), 100.0f);
 
             AddInternal(animation);
-            AddInternal(flapSound = new DrawableSample(samples.Get("wing.ogg")));
+            AddInternal(flapSound = new (samples.Get("wing.ogg")));
 
             Size = animation.Size;
-            Scale = new Vector2(3.5f);
+            Scale = new (3.5f);
         }
 
         protected override void LoadComplete()
@@ -71,7 +71,7 @@ namespace FlappyBird.Game.Elements
         public void Reset()
         {
             isIdle = true;
-            IsTouchingGround = false;
+            isTouchingGround = false;
             ClearTransforms();
             Rotation = 0.0f;
             Y = -60.0f;
@@ -116,16 +116,14 @@ namespace FlappyBird.Game.Elements
             Y -= currentVelocity * (float)Clock.ElapsedFrameTime * 0.01f;
 
             float groundPlane;
-            if (GroundY > 0.0f)
-                groundPlane = GroundY / 2.0f;
-            else
-                groundPlane = Parent.DrawHeight - DrawHeight;
+            if (groundY > 0.0f) groundPlane = (float)groundY / 2.0f;
+            else groundPlane = Parent.DrawHeight - DrawHeight;
 
             Y = Math.Min(Y, groundPlane);
 
             if (Y >= groundPlane)
             {
-                IsTouchingGround = true;
+                isTouchingGround = true;
                 ClearTransforms();
             }
 

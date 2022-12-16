@@ -6,7 +6,7 @@ using osuTK;
 
 namespace FlappyBird.Game.Elements
 {
-    public class BackdropSprite : Sprite
+    public partial class BackdropSprite : Sprite
     {
         public BackdropSprite()
         {
@@ -15,7 +15,7 @@ namespace FlappyBird.Game.Elements
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
+        private void Load(TextureStore textures)
         {
             Texture = textures.Get("background-day");
             RelativeSizeAxes = Axes.Y;

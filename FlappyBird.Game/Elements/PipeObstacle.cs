@@ -24,26 +24,26 @@ namespace FlappyBird.Game.Elements
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void Load()
         {
-            Random rnd = new();
-            topPipe = new Pipe
+            Random rnd = new ();
+            topPipe = new ()
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.TopCentre,
                 Rotation = 180.0f,
-                Position = new Vector2(0.0f, -(rnd.Next(75, 150)) + VerticalPositionAdjust),
+                Position = new (0.0f, -(rnd.Next(75, 150)) + VerticalPositionAdjust),
             };
 
-            topPipe.Scale = new Vector2(-topPipe.Scale.X, topPipe.Scale.Y);
+            topPipe.Scale = new (-topPipe.Scale.X, topPipe.Scale.Y);
 
             AddInternal(topPipe);
 
-            bottomPipe = new Pipe
+            bottomPipe = new ()
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.TopCentre,
-                Position = new Vector2(0.0f, 90 + VerticalPositionAdjust)
+                Position = new (0.0f, 90 + VerticalPositionAdjust)
             };
 
             AddInternal(bottomPipe);

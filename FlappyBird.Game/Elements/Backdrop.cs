@@ -12,40 +12,39 @@ namespace FlappyBird.Game.Elements
 
         private Vector2 lastSize;
 
-        public bool Running { get; private set; }
+        public bool running { get; set; }
 
-        public readonly double Duration;
+        public readonly double duration;
 
-        public Backdrop(Func<Sprite> createSprite, double duration = 2000.0f)
+        public Backdrop(Func<Sprite> createSprite, double duration = 2000.0)
         {
             this.createSprite = createSprite;
-            Duration = duration;
+            this.duration = duration;
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void Load()
         {
             RelativeSizeAxes = Axes.Both;
-            Size = new Vector2(1.0f);
-
+            Size = new (1.0f);
             AddInternal(createSprite());
+
         }
 
         public void Start()
         {
-            if (Running) return;
+            if (running) return;
 
-            Running = true;
-            updateLayout();
+            running = true;
+            UpdateLayout();
         }
 
         public void Freeze()
         {
-            if (!Running)
-                return;
+            if (!running) return;
 
-            Running = false;
-            stopAnimatingChildren();
+            running = false;
+            StopAnimatingChildren();
         }
 
         protected override void UpdateAfterChildren()
@@ -54,16 +53,16 @@ namespace FlappyBird.Game.Elements
 
             if (!DrawSize.Equals(lastSize))
             {
-                updateLayout();
+                UpdateLayout();
                 lastSize = DrawSize;
             }
         }
 
-        private void updateLayout()
+        private void UpdateLayout()
         {
             Sprite sprite = (Sprite)InternalChildren.First();
 
-            var spriteNum = (int)Math.Ceiling(DrawWidth / sprite.DrawWidth) + 1;
+            double spriteNum = Math.Ceiling(DrawWidth / sprite.DrawWidth) + 1;
 
             if (spriteNum != InternalChildren.Count)
             {
@@ -72,22 +71,22 @@ namespace FlappyBird.Game.Elements
                 while (InternalChildren.Count < spriteNum) AddInternal(createSprite());
             }
 
-            var offset = 0.0f;
+            float offset = 0.0f;
 
-            foreach (var childSprite in InternalChildren)
+            foreach (Drawable? childSprite in InternalChildren)
             {
-                var width = childSprite.DrawWidth * sprite.Scale.X;
+                float width = childSprite.DrawWidth * sprite.Scale.X;
                 childSprite.Position = new Vector2(offset, childSprite.Position.Y);
 
-                var fromVector = new Vector2(offset, childSprite.Position.Y);
-                var toVector = new Vector2(offset - width * 1.5f, childSprite.Position.Y);
+                Vector2 fromVector = new (offset, childSprite.Position.Y);
+                Vector2 toVector = new (offset - width * 1.5f, childSprite.Position.Y);
 
-                if (Running) childSprite.Loop(b => b.MoveTo(fromVector).MoveTo(toVector, Duration));
+                if (running) childSprite.Loop(b => b.MoveTo(fromVector).MoveTo(toVector, duration));
 
                 offset += width;
             }
         }
 
-        private void stopAnimatingChildren() => ClearTransforms(true);
+        private void StopAnimatingChildren() => ClearTransforms(true);
     }
 }

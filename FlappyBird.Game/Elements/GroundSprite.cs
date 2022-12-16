@@ -6,7 +6,7 @@ using osuTK;
 
 namespace FlappyBird.Game.Elements
 {
-    public class GroundSprite : Sprite
+    public partial class GroundSprite : Sprite
     {
         public GroundSprite()
         {
@@ -15,11 +15,11 @@ namespace FlappyBird.Game.Elements
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
+        private void Load(TextureStore textures)
         {
             Texture = textures.Get("base");
-            Scale = new Vector2(2.5f);
-            Position = new Vector2(0.0f, 40.0f);
+            Scale = new (2.5f);
+            Position = new (0.0f, 40.0f);
         }
     }
 }

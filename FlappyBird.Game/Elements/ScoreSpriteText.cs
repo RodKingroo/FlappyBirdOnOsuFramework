@@ -8,7 +8,7 @@ namespace FlappyBird.Game.Elements
 {
     public partial class ScoreSpriteText : SpriteText
     {
-        private ScoreGlyphStore glyphStore;
+        private ScoreGlyphStore? glyphStore;
 
         [Resolved]
         private TextureStore textures { get; set; }
@@ -24,25 +24,20 @@ namespace FlappyBird.Game.Elements
         }
 
         [BackgroundDependencyLoader]
-        private void load()
-        {
-            glyphStore = new ScoreGlyphStore(textures);
-        }
+        private void Load() => glyphStore = new (textures);
 
-        protected override TextBuilder CreateTextBuilder(ITexturedGlyphLookupStore store) => base.CreateTextBuilder(glyphStore);
+        protected override TextBuilder CreateTextBuilder(ITexturedGlyphLookupStore store) 
+            => base.CreateTextBuilder(glyphStore);
 
         private class ScoreGlyphStore : ITexturedGlyphLookupStore
         {
             private readonly TextureStore textures;
 
-            public ScoreGlyphStore(TextureStore textures)
-            {
-                this.textures = textures;
-            }
-
+            public ScoreGlyphStore(TextureStore textures) => this.textures = textures;
+            
             public ITexturedCharacterGlyph Get(string fontName, char character)
             {
-                var texture = textures.Get($"{character}");
+                Texture texture = textures.Get($"{character}");
 
                 if (texture == null) return null;
 

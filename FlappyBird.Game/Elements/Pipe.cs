@@ -16,9 +16,7 @@ namespace FlappyBird.Game.Elements
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
-        {
-            Texture = textures.Get("pipe-green");
-        }
+        private void Load(TextureStore textures) => Texture = textures.Get("pipe-green");
+        
     }
 }

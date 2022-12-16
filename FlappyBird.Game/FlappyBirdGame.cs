@@ -8,45 +8,44 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
-using osuTK;
 using osuTK.Input;
 
 namespace FlappyBird.Game
 {
     public partial class FlappyBirdGame : FlappyBirdGameBase
     {
-        private readonly DrawSizePreservingFillContainer gameScreen = new DrawSizePreservingFillContainer();
+        private readonly DrawSizePreservingFillContainer gameScreen = new ();
 
-        private readonly TitleSprite gameOverSprite = new TitleSprite("gameover");
-        private readonly TitleSprite logoSprite = new TitleSprite("message");
-        private readonly ScreenFlash screenFlash = new ScreenFlash();
+        private readonly TitleSprite gameOverSprite = new ("gameover");
+        private readonly TitleSprite logoSprite = new ("message");
+        private readonly ScreenFlash screenFlash = new ();
 
-        private readonly Bird bird = new Bird();
-        private readonly Obstacles obstacles = new Obstacles();
+        private readonly Bird bird = new ();
+        private readonly Obstacles obstacles = new ();
 
-        private Backdrop skyBackdrop;
-        private Backdrop groundBackdrop;
+        private Backdrop? skyBackdrop;
+        private Backdrop? groundBackdrop;
 
-        private readonly ScoreCounter scoreCounter = new ScoreCounter();
+        private readonly ScoreCounter scoreCounter = new ();
 
-        private DrawableSample scoreSound;
-        private DrawableSample punchSound;
-        private DrawableSample fallSound;
-        private DrawableSample whooshSound;
+        private DrawableSample? scoreSound;
+        private DrawableSample? punchSound;
+        private DrawableSample? fallSound;
+        private DrawableSample? whooshSound;
 
         private GameState state = GameState.Ready;
         private bool disableInput;
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void Load()
         {
-            Add(scoreSound = new DrawableSample(Audio.Samples.Get("point.ogg")));
-            Add(punchSound = new DrawableSample(Audio.Samples.Get("hit.ogg")));
-            Add(fallSound = new DrawableSample(Audio.Samples.Get("die.ogg")));
-            Add(whooshSound = new DrawableSample(Audio.Samples.Get("swoosh.ogg")));
+            Add(scoreSound = new (Audio.Samples.Get("point.ogg")));
+            Add(punchSound = new (Audio.Samples.Get("hit.ogg")));
+            Add(fallSound = new (Audio.Samples.Get("die.ogg")));
+            Add(whooshSound = new (Audio.Samples.Get("swoosh.ogg")));
 
-            skyBackdrop = new Backdrop(() => new BackdropSprite(), 20000.0f);
-            groundBackdrop = new Backdrop(() => new GroundSprite(), 2250.0f);
+            skyBackdrop = new (() => new BackdropSprite(), 20000.0f);
+            groundBackdrop = new (() => new GroundSprite(), 2250.0f);
 
             gameScreen.Children = new Drawable[]
             {
@@ -61,24 +60,24 @@ namespace FlappyBird.Game
             };
 
             gameScreen.Strategy = DrawSizePreservationStrategy.Minimum;
-            gameScreen.TargetDrawSize = new Vector2(0, 768);
+            gameScreen.TargetDrawSize = new (0, 768);
             AddInternal(gameScreen);
 
-            obstacles.ThresholdCrossed = _ =>
+            obstacles.thresholdCrossed = _ =>
             {
                 scoreCounter.IncrementScore();
                 scoreSound.Play();
             };
 
-            bird.GroundY = 525.0f;
+            bird.groundY = 525.0f;
 
-            obstacles.BirdThreshold = bird.X;
+            obstacles.birdThreshold = bird.X;
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            ready();
+            Ready();
         }
 
         protected override void Update()
@@ -88,8 +87,8 @@ namespace FlappyBird.Game
             switch (state)
             {
                 case GameState.Playing:
-                    if (obstacles.CheckForCollision(bird.CollisionQuad) || bird.IsTouchingGround)
-                        changeGameState(GameState.GameOver);
+                    if (obstacles.CheckForCollision(bird.CollisionQuad) || bird.isTouchingGround) 
+                        ChangeGameState(GameState.GameOver);
                     break;
             }
         }
@@ -98,7 +97,7 @@ namespace FlappyBird.Game
         {
             if (e.Repeat) return base.OnKeyDown(e);
 
-            if (e.Key == Key.Space && handleTap()) return true;
+            if (e.Key == Key.Space && HandleTap()) return true;
 
             return base.OnKeyDown(e);
         }
@@ -109,34 +108,32 @@ namespace FlappyBird.Game
             if (verticalOffset < 0.05f || verticalOffset > 0.95f)
                 return base.OnMouseDown(e);
 
-            if (handleTap()) return true;
+            if (HandleTap()) return true;
 
             return base.OnMouseDown(e);
         }
 
-        private bool handleTap()
+        private bool HandleTap()
         {
             if (disableInput) return false;
 
             switch (state)
             {
                 case GameState.GameOver:
-                    reset();
-                    return true;
-
+                    Reset();
+                    return true; 
                 case GameState.Playing:
                     bird.FlyUp();
-                    return true;
-
+                    return true; 
                 default:
-                    changeGameState(GameState.Playing);
+                    ChangeGameState(GameState.Playing);
                     return true;
             }
         }
 
-        private void reset() => changeGameState(GameState.Ready);
+        private void Reset() => ChangeGameState(GameState.Ready);
 
-        private void changeGameState(GameState newState)
+        private void ChangeGameState(GameState newState)
         {
             if (newState == state) return;
 
@@ -145,40 +142,38 @@ namespace FlappyBird.Game
             switch (newState)
             {
                 case GameState.Ready:
-                    ready();
-                    break;
-
+                    Ready();
+                    break; 
                 case GameState.Playing:
-                    play();
-                    break;
-
+                    Play();
+                    break; 
                 case GameState.GameOver:
-                    fail();
+                    Fail();
                     break;
             }
         }
 
-        private void ready()
+        private void Ready()
         {
             Debug.Assert(state == GameState.Ready);
 
             scoreCounter.Reset();
 
-            whooshSound.Play();
+            whooshSound?.Play();
 
             screenFlash.Flash(0.0, 700.0);
 
             bird.Reset();
             obstacles.Reset();
 
-            groundBackdrop.Start();
-            skyBackdrop.Start();
+            groundBackdrop?.Start();
+            skyBackdrop?.Start();
 
             gameOverSprite.Hide();
             logoSprite.Show();
         }
 
-        private void play()
+        private void Play()
         {
             Debug.Assert(state == GameState.Playing);
 
@@ -189,28 +184,28 @@ namespace FlappyBird.Game
             bird.FlyUp();
         }
 
-        private void fail()
+        private void Fail()
         {
             Debug.Assert(state == GameState.GameOver);
 
-            const double fade_in_duration = 30.0;
+            const double _fadeInDuration = 30.0;
 
-            screenFlash.Flash(fade_in_duration, 500.0);
-            Scheduler.AddDelayed(() => gameOverSprite.Show(), fade_in_duration);
+            screenFlash.Flash(_fadeInDuration, 500.0);
+            Scheduler.AddDelayed(() => gameOverSprite.Show(), _fadeInDuration);
 
-            punchSound.Play();
-            Scheduler.AddDelayed(() => fallSound.Play(), 70.0);
+            punchSound?.Play();
+            Scheduler.AddDelayed(() => fallSound?.Play(), 70.0);
 
             bird.FallDown();
 
             obstacles.Freeze();
-            groundBackdrop.Freeze();
-            skyBackdrop.Freeze();
+            groundBackdrop?.Freeze();
+            skyBackdrop?.Freeze();
 
-            disableGameInput(500.0f);
+            DisableGameInput(500.0f);
         }
 
-        private void disableGameInput(double duration)
+        private void DisableGameInput(double duration)
         {
             disableInput = true;
             Scheduler.AddDelayed(() => disableInput = false, duration);
@@ -223,7 +218,7 @@ namespace FlappyBird.Game
             => TextureFilteringMode.Nearest;
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void Load()
         {
             Resources.AddStore(new DllResourceStore(FlappyBirdResources.ResourceAssembly));
         }
