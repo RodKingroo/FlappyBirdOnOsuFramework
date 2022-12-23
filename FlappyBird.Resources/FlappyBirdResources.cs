@@ -1,9 +1,9 @@
 using System.Reflection;
 
-namespace FlappyBird.Resources
+namespace FlappyBird.Resources;
+
+public class FlappyBirdResources
 {
-    public class FlappyBirdResources
-    {
-        public static Assembly ResourceAssembly => typeof(FlappyBirdResources).Assembly;
-    }
+    public static Assembly ResourceAssembly 
+        => typeof(FlappyBirdResources).Assembly;
 }

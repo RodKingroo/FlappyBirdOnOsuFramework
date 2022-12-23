@@ -8,126 +8,144 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Textures;
 using osuTK;
 
-namespace FlappyBird.Game.Elements
+namespace FlappyBird.Game.Elements;
+
+public partial class Bird : CompositeDrawable
 {
-    public partial class Bird : CompositeDrawable
+    public double groundY = 0.0f;
+
+    private bool _isTouchingGround;
+    public bool IsTouchingGround
     {
-        public double groundY = 0.0f;
-
-        public bool isTouchingGround { get; set; }
-
-        
-        private TextureAnimation animation;
-
-        [Resolved]
-        private TextureStore textures { get; set; }
-
-        private DrawableSample flapSound;
-
-        private bool isIdle;
-
-        private float currentVelocity;
-
-        public Quad CollisionQuad
+        get => _isTouchingGround;
+        set
         {
-            get
-            {
-                RectangleF rect = ScreenSpaceDrawQuad.AABBFloat;
-                rect = rect.Shrink(new Vector2(rect.Width * 0.3f, rect.Height * 0.2f));
-                return Quad.FromRectangle(rect);
-            }
+            if (value != _isTouchingGround) _isTouchingGround = value;
         }
+    }
 
-        [BackgroundDependencyLoader]
-        private void Load(ISampleStore samples)
+
+    private TextureAnimation? animation;
+    private TextureStore? _textures;
+    [Resolved]
+    private TextureStore Textures 
+    { 
+        get => _textures ?? throw new ArgumentNullException("Name is required"); 
+        set
         {
-            Anchor = Anchor.CentreLeft;
-            Origin = Anchor.Centre;
-            Position = new Vector2(120.0f, 0.0f);
+            if(value != _textures) _textures = value; 
+        } 
+    
+    }
 
-            animation = new ()
-            {
-                Origin = Anchor.Centre,
-                Anchor = Anchor.Centre,
-            };
+    private DrawableSample? flapSound;
 
-            animation.AddFrame(textures.Get("redbird-upflap"), 100.0f);
-            animation.AddFrame(textures.Get("redbird-downflap"), 100.0f);
-            animation.AddFrame(textures.Get("redbird-midflap"), 100.0f);
+    private bool isIdle;
 
-            AddInternal(animation);
-            AddInternal(flapSound = new (samples.Get("wing.ogg")));
+    private float currentVelocity;
+    
 
-            Size = animation.Size;
-            Scale = new (3.5f);
+    public Quad CollisionQuad
+    {
+        get
+        {
+            var rect = ScreenSpaceDrawQuad.AABBFloat;
+            rect = rect.Shrink(amount: new Vector2(x: rect.Width, y: rect.Height));
+            return Quad.FromRectangle(rectangle: rect);
         }
+    }
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            Reset();
-        }
+    [BackgroundDependencyLoader]
+    private void Load(ISampleStore samples)
+    {
+        Anchor = Anchor.CentreLeft;
+        Origin = Anchor.Centre;
+        Position = new Vector2(x: 120.0f, y: 0.0f);
 
-        public void Reset()
+        animation = new()
         {
-            isIdle = true;
-            isTouchingGround = false;
+            Origin = Anchor.Centre,
+            Anchor = Anchor.Centre,
+        };
+
+        animation.AddFrame(content: Textures.Get(name: "redbird-upflap"), displayDuration: 100.0f);
+        animation.AddFrame(content: Textures.Get(name: "redbird-downflap"), displayDuration: 100.0f);
+        animation.AddFrame(content: Textures.Get(name: "redbird-midflap"), displayDuration: 100.0f);
+
+        AddInternal(drawable: animation);
+        AddInternal(drawable: flapSound = new(sample: samples.Get(name: "wing.ogg")));
+
+        Size = animation.Size;
+        Scale = new Vector2(value: 3.5f);
+    }
+
+    protected override void LoadComplete()
+    {
+        base.LoadComplete();
+        Reset();
+    }
+
+    public void Reset()
+    {
+        isIdle = true;
+        IsTouchingGround = false;
+        ClearTransforms();
+        Rotation = 0.0f;
+        Y = -60.0f;
+        animation!.IsPlaying = true;
+        this.Loop(childGenerators: b 
+            => b.MoveToOffset(new Vector2(0.0f, -20.0f), 1000.0f, Easing.InOutSine)
+                        .Then()
+                        .MoveToOffset(new Vector2(0.0f, 20.0f), 1000.0f, Easing.InOutSine)
+        );
+    }
+
+    public void FallDown()
+    {
+        currentVelocity = 0.0f;
+        animation!.IsPlaying = false;
+        animation.GotoFrame(2);
+    }
+
+    public void FlyUp()
+    {
+        if (isIdle)
+        {
+            isIdle = false;
             ClearTransforms();
-            Rotation = 0.0f;
-            Y = -60.0f;
-            animation.IsPlaying = true;
-            this.Loop(b => b.MoveToOffset(new Vector2(0.0f, -20.0f), 1000.0f, Easing.InOutSine)
-                            .Then()
-                            .MoveToOffset(new Vector2(0.0f, 20.0f), 1000.0f, Easing.InOutSine)
-            );
         }
 
-        public void FallDown()
+        animation!.GotoFrame(0);
+
+        currentVelocity = 90.0f;
+        this.RotateTo(newRotation: -45.0f).Then(delay: 350.0f)
+            .RotateTo(newRotation: 90.0f, duration: 500.0f);
+        flapSound!.Play();
+    }
+
+    protected override void Update()
+    {
+        if (isIdle)
         {
-            currentVelocity = 0.0f;
-            animation.IsPlaying = false;
-            animation.GotoFrame(2);
-        }
-
-        public void FlyUp()
-        {
-            if (isIdle)
-            {
-                isIdle = false;
-                ClearTransforms();
-            }
-
-            animation.GotoFrame(0);
-
-            currentVelocity = 90.0f;
-            this.RotateTo(-45.0f).Then(350.0f).RotateTo(90.0f, 500.0f);
-            flapSound.Play();
-        }
-
-        protected override void Update()
-        {
-            if (isIdle)
-            {
-                base.Update();
-                return;
-            }
-
-            currentVelocity -= (float)Clock.ElapsedFrameTime * 0.22f;
-            Y -= currentVelocity * (float)Clock.ElapsedFrameTime * 0.01f;
-
-            float groundPlane;
-            if (groundY > 0.0f) groundPlane = (float)groundY / 2.0f;
-            else groundPlane = Parent.DrawHeight - DrawHeight;
-
-            Y = Math.Min(Y, groundPlane);
-
-            if (Y >= groundPlane)
-            {
-                isTouchingGround = true;
-                ClearTransforms();
-            }
-
             base.Update();
+            return;
         }
+
+        currentVelocity -= (float)Clock.ElapsedFrameTime * 0.22f;
+        Y -= currentVelocity * (float)Clock.ElapsedFrameTime * 0.01f;
+
+        float groundPlane;
+        if (groundY > 0.0f) groundPlane = (float)groundY / 2.0f;
+        else groundPlane = Parent.DrawHeight - DrawHeight;
+
+        Y = Math.Min(val1: Y, groundPlane);
+
+        if (Y >= groundPlane)
+        {
+            IsTouchingGround = true;
+            ClearTransforms();
+        }
+
+        base.Update();
     }
 }

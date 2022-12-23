@@ -2,34 +2,28 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
-using osuTK;
 
-namespace FlappyBird.Game.Elements
+namespace FlappyBird.Game.Elements;
+
+public partial class BackdropSprite : Sprite
 {
-    public partial class BackdropSprite : Sprite
+    public BackdropSprite()
     {
-        public BackdropSprite()
-        {
-            Anchor = Anchor.TopLeft;
-            Origin = Anchor.TopLeft;
-        }
+        Anchor = Anchor.TopLeft;
+        Origin = Anchor.TopLeft;
+    }
 
-        [BackgroundDependencyLoader]
-        private void Load(TextureStore textures)
-        {
-            Texture = textures.Get("background-day");
-            RelativeSizeAxes = Axes.Y;
-            Height = 1.0f;
-        }
+    [BackgroundDependencyLoader]
+    private void Load(TextureStore textures)
+    {
+        Texture = textures.Get(name: "background-day");
+        RelativeSizeAxes = Axes.Y;
+        Height = 1.0f;
+    }
 
-        protected override void Update()
-        {
-            base.Update();
-
-            Vector2 size = Texture.Size;
-            double aspectRatio = size.X / size.Y;
-
-            Width = (float)Math.Ceiling(DrawHeight * aspectRatio);
-        }
+    protected override void Update()
+    {
+        base.Update();
+        Width = (float)Math.Ceiling(a: DrawHeight * (double)(Texture.Size.X / Texture.Size.Y));
     }
 }

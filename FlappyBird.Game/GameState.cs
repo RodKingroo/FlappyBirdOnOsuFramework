@@ -1,9 +1,8 @@
-namespace FlappyBird.Game
+namespace FlappyBird.Game;
+
+internal enum GameState
 {
-    internal enum GameState
-    {
-        Ready,
-        Playing,
-        GameOver
-    }
+    Ready,
+    Playing,
+    GameOver
 }

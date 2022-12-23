@@ -4,63 +4,71 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Utils;
 using osuTK;
 
-namespace FlappyBird.Game.Elements
+namespace FlappyBird.Game.Elements;
+
+public partial class Obstacles : CompositeDrawable
 {
-    public partial class Obstacles : CompositeDrawable
+    private const double pipe_distance = 200.0;
+
+    private bool _running;
+    public bool Running 
+    { 
+        get => _running; 
+        set
+        {
+            if(value != _running) _running = value;
+        }  
+    }
+
+    public float birdThreshold = 0.0f;
+
+    public Action<int>? thresholdCrossed;
+
+    private int crossedThresholdCount;
+
+    private Stack<Drawable> obstaclesToRemove = new Stack<Drawable>();
+
+    private int obstacleCount;
+
+    private bool frozen;
+    
+
+    private float pipeVelocity
     {
-        public Vector2 collisionBoxSize = new(50);
-
-        public bool running { get; set; }
-
-        public float birdThreshold = 0.0f;
-
-        public Action<int> thresholdCrossed;
-
-        private int crossedThresholdCount;
-
-        private Stack<Drawable> obstaclesToRemove = new();
-
-        private int obstacleCount;
-
-        private bool frozen;
-
-        private float pipeVelocity
+        get
         {
-            get
+            return Clock.FramesPerSecond switch
             {
-                if (Clock.FramesPerSecond > 0.0f) return 185.0f * (float)(Clock.ElapsedFrameTime / 675.0f);
-
-                return 0.0f;
-            }
+                > 0.0f => 185.0f * (float)(Clock.ElapsedFrameTime / 675.0f),
+                _ => 0.0f
+            };
         }
+    }
 
-        private const float pipe_distance = 350.0f;
 
-        public Obstacles()
+
+    public Obstacles()
+    {
+        Anchor = Anchor.Centre;
+        Origin = Anchor.Centre;
+        RelativeSizeAxes = Axes.Both;
+    }
+
+    public void Start()
+    {
+        if (!Running) Running = true;
+    }
+
+    public void Freeze()
+    {
+        if (Running) frozen = true;
+    }
+
+    public void Reset()
+    {
+        if (Running)
         {
-            Anchor = Anchor.Centre;
-            Origin = Anchor.Centre;
-            RelativeSizeAxes = Axes.Both;
-        }
-
-        public void Start()
-        {
-            if (running) return; 
-            running = true;
-
-        }
-
-        public void Freeze()
-        {
-            if (!running) return;
-            frozen = true;
-        }
-
-        public void Reset()
-        {
-            if (!running) return;
-
-            running = false;
+            Running = false;
             frozen = false;
 
             obstacleCount = 0;
@@ -68,13 +76,16 @@ namespace FlappyBird.Game.Elements
 
             ClearInternal();
         }
+    }
 
-        public bool CheckForCollision(Quad birdQuad) => InternalChildren.Cast<PipeObstacle>().FirstOrDefault()?.CheckCollision(birdQuad) ?? false;
+    public bool CheckForCollision(Quad birdQuad) 
+        => InternalChildren.Cast<PipeObstacle>().FirstOrDefault()?.CheckCollision(birdQuad: birdQuad) 
+        ?? false;
 
-        protected override void Update()
+    protected override void Update()
+    {
+        if (Running)
         {
-            if (!running) return;
-
             if (InternalChildren.Count == 0)
             {
                 SpawnNewObstacle();
@@ -86,15 +97,16 @@ namespace FlappyBird.Game.Elements
                 if (frozen) break;
 
                 PipeObstacle? obstacle = (PipeObstacle)drawable;
-                obstacle.Position = new Vector2(obstacle.Position.X - pipeVelocity, 0.0f);
+                obstacle.Position = new Vector2(x: obstacle.Position.X - pipeVelocity, y: 0.0f);
 
-                if (obstacle.Position.X + obstacle.DrawWidth < 0.0f) obstaclesToRemove.Push(obstacle);
-                
+                if (obstacle.Position.X + obstacle.DrawWidth < 0.0f) 
+                    obstaclesToRemove.Push(item: obstacle);
+
             }
 
-            while (obstaclesToRemove.TryPop(out var obstacle))
+            while (obstaclesToRemove.TryPop(result: out var obstacle))
             {
-                RemoveInternal(obstacle, true);
+                RemoveInternal(drawable: obstacle, disposeImmediately: true);
 
                 obstacleCount++;
             }
@@ -105,25 +117,23 @@ namespace FlappyBird.Game.Elements
             {
                 crossedThresholdCount++;
 
-                thresholdCrossed?.Invoke(crossedThresholdCount);
+                thresholdCrossed?.Invoke(obj: crossedThresholdCount);
             }
 
             if (InternalChildren.Count > 0)
             {
                 PipeObstacle lastObstacle = (PipeObstacle)InternalChildren.Last();
-                if (lastObstacle.Position.X + lastObstacle.DrawWidth < DrawWidth - pipe_distance) 
+                if (lastObstacle.Position.X + lastObstacle.DrawWidth < DrawWidth - pipe_distance)
                     SpawnNewObstacle();
             }
             else SpawnNewObstacle();
         }
-
-        private void SpawnNewObstacle()
-        {
-            AddInternal(new PipeObstacle
-            {
-                Position = new(DrawWidth, 10.0f),
-                VerticalPositionAdjust = RNG.NextSingle(-150.0f, 50.0f)
-            });
-        }
     }
+
+    private void SpawnNewObstacle() 
+        => AddInternal(drawable: new PipeObstacle
+        {
+            Position = new Vector2(x: DrawWidth, y: 0f),
+            verticalPositionAdjust = RNG.NextSingle(minValue: -150.0f, maxValue: 100.0f)
+        });
 }

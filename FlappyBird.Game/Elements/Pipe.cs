@@ -4,19 +4,19 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osuTK;
 
-namespace FlappyBird.Game.Elements
-{
-    public partial class Pipe : Sprite
-    {
-        public Pipe()
-        {
-            Anchor = Anchor.BottomCentre;
-            Origin = Anchor.BottomCentre;
-            Scale = new Vector2(4.1f);
-        }
+namespace FlappyBird.Game.Elements;
 
-        [BackgroundDependencyLoader]
-        private void Load(TextureStore textures) => Texture = textures.Get("pipe-green");
-        
+public partial class Pipe : Sprite
+{
+    public Pipe()
+    {
+        Anchor = Anchor.BottomCentre;
+        Origin = Anchor.BottomCentre;
+        Scale = new Vector2(value: 4.0f);
     }
+
+    [BackgroundDependencyLoader]
+    private void Load(TextureStore textures) 
+        => Texture = textures.Get(name: "pipe-green");
+    
 }
